@@ -10,6 +10,7 @@ let cachedData;
 let cacheTime;
 
 router.get("/", async (req, res, next) => {
+  console.log("IP:", req.ip);
   //memory cache
   if (cacheTime && cacheTime > Date.now() - 30 * 1000) {
     return res.json(cachedData);
