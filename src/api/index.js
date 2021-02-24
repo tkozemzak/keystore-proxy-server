@@ -1,15 +1,17 @@
-const express = require('express');
+const express = require("express");
 
-const emojis = require('./emojis');
+const marsWeather = require("./mars-weather");
+const projectWishlist = require("./project-wishlist");
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
+router.get("/", (req, res) => {
   res.json({
-    message: 'API - 👋🌎🌍🌏'
+    message: "Hello From Tim's Proxy Server",
   });
 });
 
-router.use('/emojis', emojis);
+router.use("/mars-weather", marsWeather);
+router.use("/project-wishlist", projectWishlist);
 
 module.exports = router;
