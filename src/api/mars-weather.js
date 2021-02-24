@@ -1,11 +1,20 @@
 const express = require("express");
 const axios = require("axios");
+const rateLimit = require("express-rate-limit");
 
 const router = express.Router();
 
 const BASE_URL = "https://api.nasa.gov/insight_weather/?";
 
+let cachedData;
+let cacheTime;
+
 router.get("/", async (req, res, next) => {
+  //memory cache
+  if (cacheTime && cacheTime > Date.now() - 30 * 1000) {
+    return res.json(cachedData);
+  }
+
   //request to API
   try {
     const params = new URLSearchParams({
@@ -15,10 +24,16 @@ router.get("/", async (req, res, next) => {
     });
 
     const { data } = await axios.get(`${BASE_URL}${params}`);
+
+    //set cache for time and data
+    cachedData = data;
+    cacheTime = Date.now();
+    data.cacheTime = cacheTime;
     //respond to request with data
-    res.json(data);
+
+    return res.json(data);
   } catch (error) {
-    next(error);
+    return next(error);
   }
 });
 
