@@ -7,14 +7,13 @@ const fs = require("fs");
 
 require("dotenv").config();
 
-const middlewares = require("./middlewares");
-const api = require("./api");
-
-const app = express();
-
 var accessLogStream = fs.createWriteStream(path.join(__dirname, "access.log"), {
   flags: "a",
 });
+
+const middlewares = require("./middlewares");
+const api = require("./api");
+const app = express();
 
 app.use(morgan("common", { stream: accessLogStream }));
 app.use(helmet());

@@ -20,6 +20,7 @@ try {
     const { data } = await axios.get(
       `${WEATHER_URL}${req.params.city},us&appid=${process.env.WEATHER_API_KEY}&units=imperial`
     );
+    console.log("Sending weather data to client:", data);
     res.json(data);
   });
 } catch (err) {
