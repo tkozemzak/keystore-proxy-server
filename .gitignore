@@ -69,3 +69,6 @@ typings/
 
 # Serverless directories
 .serverless
+
+/src/server.cert
+/src/server.key
