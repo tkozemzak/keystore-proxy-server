@@ -7,8 +7,8 @@ const port = process.env.PORT || 8000;
 https
   .createServer(
     {
-      key: fs.readFileSync("~/projects/keystore-proxy-server/src/server.key"),
-      cert: fs.readFileSync("~/projects/keystore-proxy-server/src/server.cert"),
+      key: fs.readFileSync("server.key"),
+      cert: fs.readFileSync("server.cert"),
     },
     app
   )
