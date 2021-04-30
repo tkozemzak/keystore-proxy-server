@@ -1,0 +1,8 @@
+const app = require("./app");
+const https = require("https");
+const fs = require("fs");
+
+const port = process.env.PORT ||
+    app.listen(process.env.PORT || 8000, () => {
+    console.log(`Listening: http://localhost:${port}`);
+  });
