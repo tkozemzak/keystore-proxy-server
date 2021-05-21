@@ -25,7 +25,9 @@
     "express-rate-limit": "^5.2.6",
     "helmet": "^4.4.1",
     "https": "^1.0.0",
-    "morgan": "^1.10.0"
+    "knex": "^0.95.6",
+    "morgan": "^1.10.0",
+    "pg": "^8.6.0"
   },
   "devDependencies": {
     "eslint": "^7.18.0",
