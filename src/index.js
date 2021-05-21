@@ -1,13 +1,12 @@
 const app = require("./app");
 const https = require("https");
 const fs = require("fs");
-const cors = require('cors')
+const path = require('path')
+
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
 
 const port = process.env.PORT || 8000;
-
-app.use(cors());
-
-
+console.log("dotenv", process.env.PORT);
 // https
 //   .createServer(
 //     {
