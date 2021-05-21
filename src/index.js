@@ -1,9 +1,12 @@
 const app = require("./app");
 const https = require("https");
 const fs = require("fs");
+const path = require('path')
+
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
 
 const port = process.env.PORT || 8000;
-
+console.log("dotenv", process.env.PORT);
 // https
 //   .createServer(
 //     {
@@ -12,6 +15,6 @@ const port = process.env.PORT || 8000;
 //     },
 //     app
 //   )
-app.listen(process.env.PORT || 8000, () => {
+app.listen(port, () => {
   console.log(`Listening: http://localhost:${port}`);
 });

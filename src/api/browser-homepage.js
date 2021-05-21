@@ -1,5 +1,6 @@
 const express = require("express");
 const axios = require("axios");
+const knex = require("../../knex")
 
 const router = express.Router();
 
@@ -10,6 +11,7 @@ router.get("/", async (req, res, next) => {
   return res.send("Hello");
 });
 
+//WEATHER WIDGET
 router.get("/geomap/:lat/:long", async (req, res, next) => {
   const { data } = await axios.get(
     `${MAP_URL}${req.params.lat},${req.params.long}&sensor=true&key=${process.env.GOOGLE_GEOCODE_API_KEY}`
@@ -30,5 +32,37 @@ try {
 } catch (err) {
   res.send(err);
 }
+
+
+//TODOS WIDGET
+router.get("/todos/:id", async (req, res) => {
+ 
+  const todosListFromDb = await knex('todos').where({'user_id': req.params.id})
+  console.log("todosListFromDb", todosListFromDb);
+  res.send(todosListFromDb)
+})
+
+
+router.post("/todos/:id", async (req, res) => {
+  try {
+
+    let newTodo = {
+        "title": req.body.title,
+        "additionalInfo": req.body.additionalInfo,
+        "user_id": req.params.id,
+        "completed": 0
+      }
+  
+    await knex('todos').insert(newTodo).then(()=> {
+      console.log("ENTERED TODO INTO DB: ", newTodo);
+      res.sendStatus(200)
+  })
+  } catch (err){
+    console.log("ERROR OCCURRED: ", err);
+    res.send(err)
+  }
+
+
+})
 
 module.exports = router;
