@@ -5,7 +5,7 @@ exports.up = function(knex, Promise) {
       table.string("additionalInfo");
       table.integer("completed").defaultTo(0);
       table.integer("user_id").defaultTo(1);
-      table.timestamps(true, true);
+      table.string("created_at").defaultTo(new Date());
     }).then(()=> {
       console.log("Success")
     })
