@@ -35,6 +35,8 @@ try {
 
 
 //TODOS WIDGET
+
+//Retrieve all todos for a user
 router.get("/todos/:id", async (req, res) => {
  
   const todosListFromDb = await knex('todos').where({'user_id': req.params.id})
@@ -42,7 +44,7 @@ router.get("/todos/:id", async (req, res) => {
   res.send(todosListFromDb)
 })
 
-
+//Receive new todo and enter into db
 router.post("/todos/:id", async (req, res) => {
   try {
 
@@ -53,9 +55,9 @@ router.post("/todos/:id", async (req, res) => {
         "completed": 0
       }
   
-    await knex('todos').insert(newTodo).then(()=> {
-      console.log("ENTERED TODO INTO DB: ", newTodo);
-      res.sendStatus(200)
+    await knex('todos').insert(newTodo).returning('id').then((id)=> {
+      console.log("ENTERED TODO INTO DB. TODO ID: ", id);
+      res.status(200).send(id)
   })
   } catch (err){
     console.log("ERROR OCCURRED: ", err);
