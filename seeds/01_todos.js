@@ -9,6 +9,7 @@ exports.seed = function(knex) {
           title: "Pick up trash",
           additionalInfo: "Tuesday Night",
           user_id: 1,
+          completed: 1,
           
         },
         {
