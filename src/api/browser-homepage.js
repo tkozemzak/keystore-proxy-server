@@ -53,7 +53,8 @@ router.post("/todos/:id", async (req, res) => {
         "title": req.body.title,
         "additionalInfo": req.body.additionalInfo,
         "user_id": req.params.id,
-        "completed": 0
+        "completed": 0,
+        "created_at": req.body.created_at
       }
   
     await knex('todos').insert(newTodo).returning('id').then((id)=> {
