@@ -46,6 +46,7 @@ router.get("/todos/:id", async (req, res) => {
 
 //Receive new todo and enter into db
 router.post("/todos/:id", async (req, res) => {
+  console.log("req.BODY", req)
   try {
 
     let newTodo = {
@@ -56,7 +57,7 @@ router.post("/todos/:id", async (req, res) => {
       }
   
     await knex('todos').insert(newTodo).returning('id').then((id)=> {
-      console.log(`ENTERED TODO INTO DB. TODO ID:  ${id}, \n ${newTodo}`);
+      console.log(`ENTERED TODO INTO DB. TODO ID:  ${id}`);
       res.status(200).send(id)
   })
   } catch (err){

@@ -5,9 +5,19 @@ exports.seed = function(knex) {
     .then(function () {
       // Inserts seed entries
       return knex('users').insert([
-        {id: 1, firstName: 'rowValue1'},
-        {id: 2, firstName: 'rowValue2'},
-        {id: 3, firstName: 'rowValue3'}
+        {
+          firstName: 'Timothy',
+          lastName: 'Kozemzak',
+          email: 'timkozemzak@gmail.com',
+          password: '1111'
+          },
+        {
+          firstName: 'Peter',
+          lastName: 'Pettigrew',
+          email: 'ppettigrew@gmail.com',
+          password: '1234'
+          },
+        
       ]);
     });
 };
