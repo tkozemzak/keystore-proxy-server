@@ -40,23 +40,29 @@ try {
 router.post("/todos/login", async (req, res) => {
   console.log("req.BODY", req.body)
 
-  try {
-     let userFromDb = await knex('users').where('email', req.body.email)
-   
-      if (userFromDb[0].password === req.body.password) {
-        console.log(`Password Matches for user:  ${userFromDb[0].email}`);
-        //remove password from object and send to client
-        delete userFromDb[0].password;
-        res.status(200).send(userFromDb[0])
-      } else {
-        console.log("Wrong Password");
-        res.status(403).send("Wrong Password")
-
-      }
-  } catch (err){
-    console.log("ERROR OCCURRED: ", err);
-    res.send(err)
+  if (!req.body.password.length || !req.body.email.length) {
+    res.status(200).send({message: "Empty Fields"})
+  } else {
+    try {
+      let userFromDb = await knex('users').where('email', req.body.email)
+    
+       if (userFromDb[0].password === req.body.password) {
+         console.log(`Password Matches for user:  ${userFromDb[0].email}`);
+         //remove password from object and send to client
+         delete userFromDb[0].password;
+         res.status(200).send(userFromDb[0])
+       } else {
+         console.log("Wrong Password");
+         res.status(200).send({message: "Wrong Password"})
+ 
+       }
+   } catch (err){
+     console.log("ERROR OCCURRED: ", err);
+     res.send(err)
+   }
   }
+
+  
 
 
 })
