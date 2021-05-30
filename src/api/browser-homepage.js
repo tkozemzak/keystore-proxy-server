@@ -46,7 +46,7 @@ router.get("/todos/:id", async (req, res) => {
 
 //Receive new todo and enter into db
 router.post("/todos/:id", async (req, res) => {
-  console.log("req.BODY", req)
+  console.log("req.BODY", req.body)
   try {
 
     let newTodo = {
@@ -67,6 +67,30 @@ router.post("/todos/:id", async (req, res) => {
   }
 
 
+})
+
+//Receive updated todo data and update in db
+router.put("/todos/:id/:todoid", async (req, res) => {
+  try {
+
+    let updatedTodo = {
+        "title": req.body.title,
+        "additionalInfo": req.body.additionalInfo,
+        "user_id": req.params.id,
+        "completed": req.body.completed
+        
+      }
+
+      await knex('todos').where('id', req.params.todoid).update(updatedTodo).returning('id').then((id)=> {
+        console.log(`UPDATED TODO IN DB. TODO ID:  ${id}`)
+        res.status(200)
+      })
+  
+    
+  } catch (err){
+    console.log("ERROR OCCURRED: ", err);
+    res.send(err)
+  }
 })
 
 module.exports = router;

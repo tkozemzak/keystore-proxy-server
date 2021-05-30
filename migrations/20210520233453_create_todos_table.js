@@ -3,7 +3,7 @@ exports.up = function(knex, Promise) {
       table.increments('id').primary();
       table.string("title");
       table.string("additionalInfo");
-      table.integer("completed").defaultTo(0);
+      table.boolean("completed").defaultTo(false);
       table.integer("user_id").defaultTo(1);
       table.string("created_at").defaultTo(new Date());
     }).then(()=> {
