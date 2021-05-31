@@ -127,9 +127,17 @@ router.put("/todos/:id/:todoid", async (req, res) => {
 //Delete a todo from DB
 router.delete("/todos/:id/:todoid", async (req, res) => {
   try {
-      await knex('todos').where('id', req.params.todoid).del().then(()=> {
-        console.log(`DELETED TODO IN DB. TODO ID:  ${req.params.todoid}`)
-        res.status(200)
+      await knex('todos').where('id', req.params.todoid).del().returning("id").then((id)=> {
+        if (id.length) {
+          console.log(`DELETED TODO IN DB. TODO ID:  ${id}`)
+          res.status(200).send({message: "Successfully Deleted"})
+        } 
+        else {
+          console.log(`TODO with ID ${req.params.todoid} not found in Database`)
+
+          res.status(404).send({message: "Todo not found in Database"})
+
+        }
       })
   
     
