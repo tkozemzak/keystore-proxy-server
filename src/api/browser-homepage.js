@@ -10,7 +10,7 @@ const WEATHER_URL = `https://api.openweathermap.org/data/2.5/weather?q=`;
 router.get("/", async (req, res, next) => {
   return res.send("Hello");
 });
-
+//-------------
 //WEATHER WIDGET
 router.get("/geomap/:lat/:long", async (req, res, next) => {
   const { data } = await axios.get(
@@ -33,7 +33,7 @@ try {
   res.send(err);
 }
 
-
+//--------
 //TODOS WIDGET
 
 //login
