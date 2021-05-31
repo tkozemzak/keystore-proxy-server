@@ -3,6 +3,9 @@
   "version": "1.2.0",
   "description": " A basic starter for an express.js API",
   "main": "index.js",
+  "engines": {
+    "node": "14.16.1"
+  },
   "scripts": {
     "pull": "git pull origin master && pm2 restart keystoreproxyserver",
     "start": "node src/index.js",
