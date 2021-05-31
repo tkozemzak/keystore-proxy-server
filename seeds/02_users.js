@@ -17,6 +17,12 @@ exports.seed = function(knex) {
           email: 'ppettigrew@gmail.com',
           password: '1234'
           },
+        {
+          firstName: 'Test',
+          lastName: 'User',
+          email: 'test',
+          password: 'test'
+          },
         
       ]);
     });
