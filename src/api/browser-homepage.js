@@ -124,4 +124,19 @@ router.put("/todos/:id/:todoid", async (req, res) => {
   }
 })
 
+//Delete a todo from DB
+router.delete("/todos/:id/:todoid", async (req, res) => {
+  try {
+      await knex('todos').where('id', req.params.todoid).del().then(()=> {
+        console.log(`DELETED TODO IN DB. TODO ID:  ${req.params.todoid}`)
+        res.status(200)
+      })
+  
+    
+  } catch (err){
+    console.log("ERROR OCCURRED: ", err);
+    res.send(err)
+  }
+})
+
 module.exports = router;
