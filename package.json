@@ -8,9 +8,7 @@
   },
   "scripts": {
     "pull": "git pull origin master && pm2 restart keystore",
-
     "pullseed": "git pull origin master && pm2 restart keystore && bash knex.sh",
-
     "pull and seed": "git pull origin master && pm2 restart keystore && bash knex.sh",
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
