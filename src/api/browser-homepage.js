@@ -61,10 +61,38 @@ router.post("/todos/login", async (req, res) => {
      res.send(err)
    }
   }
+})
 
+
+//signup
+router.post("/todos/signup", async (req, res) => {
+  console.log("req.BODY", req.body)
+
+  let newUser = {
+    "firstName": req.body.firstName,
+    "lastName": req.body.lastName,
+    "email": req.body.email,
+    "password": req.body.password,
+    "created_at": req.body.created_at
+  }
+    try {
+//check for existing user in DB
+      let userFromDb = await knex('users').where('email', newUser.email)
+      console.log('user from DB', userFromDb)
+
+      if(userFromDb.length) {
+        res.status(200).send({message: "User already exists"})
+      } else {
+//if user doesn't exist in db, create new user
+        await knex('users').insert(newUser)
   
-
-
+        res.status(200).send(newUser)
+      }
+   } catch (err){
+     console.log("ERROR OCCURRED: ", err);
+     res.send(err)
+   }
+  
 })
 
 //Retrieve all todos for a user
