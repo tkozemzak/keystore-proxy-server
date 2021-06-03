@@ -175,4 +175,21 @@ router.delete("/todos/:id/:todoid", async (req, res) => {
   }
 })
 
+//NEWS
+
+//Fetch top news stories
+router.get("/news/top", async (req, res) => {
+
+  try {
+    let topStoriesFromApi = await axios.get(`https://newsapi.org/v2/top-headlines?country=us&apiKey=${process.env.NEWS_API_KEY}`)
+
+    console.log("topStoriesFromApi", topStoriesFromApi.data.articles[0])
+  
+    res.send(topStoriesFromApi.data)
+  } catch (err) {
+    res.send(err)
+  }
+})
+
+
 module.exports = router;
