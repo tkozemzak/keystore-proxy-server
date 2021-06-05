@@ -13,25 +13,36 @@ router.get("/", async (req, res, next) => {
 //-------------
 //WEATHER WIDGET
 router.get("/geomap/:lat/:long", async (req, res, next) => {
-  const { data } = await axios.get(
-    `${MAP_URL}${req.params.lat},${req.params.long}&sensor=true&key=${process.env.GOOGLE_GEOCODE_API_KEY}`
-  );
-  let foundCity = data.results[0].address_components[3].short_name;
-  console.log("Sending location data to client:", foundCity);
-  return res.json(foundCity);
+  try {
+    const { data } = await axios.get(
+      `${MAP_URL}${req.params.lat},${req.params.long}&sensor=true&key=${process.env.GOOGLE_GEOCODE_API_KEY}`
+    );
+    let foundCity = data.results[0].address_components[3].short_name;
+    console.log("Sending location data to client:", foundCity);
+    return res.json(foundCity);
+  } catch(err) {
+    console.log("Error", err)
+    res.status(404)
+  }
+  
 });
 
-try {
+
   router.get("/weather/:city", async (req, res, next) => {
-    const { data } = await axios.get(
-      `${WEATHER_URL}${req.params.city},us&appid=${process.env.WEATHER_API_KEY}&units=imperial`
-    );
-    console.log("Sending weather data to client:", data);
-    res.json(data);
-  });
-} catch (err) {
-  res.send(err);
-}
+    try {
+      const { data } = await axios.get(
+        `${WEATHER_URL}${req.params.city},us&appid=${process.env.WEATHER_API_KEY}&units=imperial`
+      );
+      console.log("Sending weather data to client:", data);
+      res.json(data);
+    } catch(err) {
+      console.log("Error", err)
+      res.status(404)
+    }
+
+  })
+    
+ 
 
 //--------
 //TODOS WIDGET
@@ -57,8 +68,8 @@ router.post("/todos/login", async (req, res) => {
  
        }
    } catch (err){
-     console.log("ERROR OCCURRED: ", err);
-     res.send(err)
+     console.log("Error", err);
+     res.status(404)
    }
   }
 })
@@ -89,40 +100,46 @@ router.post("/todos/signup", async (req, res) => {
         res.status(200).send(newUser)
       }
    } catch (err){
-     console.log("ERROR OCCURRED: ", err);
-     res.send(err)
-   }
+    console.log("Error", err);
+    res.status(404)
+  }
   
 })
 
 //Retrieve all todos for a user
 router.get("/todos/:id", async (req, res) => {
  
-  const todosListFromDb = await knex('todos').where({'user_id': req.params.id})
-  console.log("todosListFromDb", todosListFromDb);
-  res.send(todosListFromDb)
+  try {
+    const todosListFromDb = await knex('todos').where({'user_id': req.params.id})
+    console.log("todosListFromDb", todosListFromDb);
+    res.send(todosListFromDb)
+  } catch (err){
+    console.log("Error", err);
+    res.status(404)
+  }
+  
 })
 
 //Receive new todo and enter into db
 router.post("/todos/:id", async (req, res) => {
   console.log("req.BODY", req.body)
-  try {
 
-    let newTodo = {
-        "title": req.body.title,
-        "additionalInfo": req.body.additionalInfo,
-        "user_id": req.params.id,
-        "completed": 0,
-        "created_at": req.body.created_at
-      }
-  
+  let newTodo = {
+    "title": req.body.title,
+    "additionalInfo": req.body.additionalInfo,
+    "user_id": req.params.id,
+    "completed": 0,
+    "created_at": req.body.created_at
+  }
+
+  try {
     await knex('todos').insert(newTodo).returning('id').then((id)=> {
       console.log(`ENTERED TODO INTO DB. TODO ID:  ${id}`);
       res.status(200).send(id)
   })
   } catch (err){
-    console.log("ERROR OCCURRED: ", err);
-    res.send(err)
+    console.log("Error", err);
+    res.status(404)
   }
 
 
@@ -130,25 +147,24 @@ router.post("/todos/:id", async (req, res) => {
 
 //Receive updated todo data and update in db
 router.put("/todos/:id/:todoid", async (req, res) => {
-  try {
 
-    let updatedTodo = {
-        "title": req.body.title,
-        "additionalInfo": req.body.additionalInfo,
-        "user_id": req.params.id,
-        "completed": req.body.completed
-        
-      }
+  let updatedTodo = {
+    "title": req.body.title,
+    "additionalInfo": req.body.additionalInfo,
+    "user_id": req.params.id,
+    "completed": req.body.completed
+    
+  }
+
+  try {
 
       await knex('todos').where('id', req.params.todoid).update(updatedTodo).returning('id').then((id)=> {
         console.log(`UPDATED TODO IN DB. TODO ID:  ${id}`)
         res.status(200)
-      })
-  
-    
+      }) 
   } catch (err){
-    console.log("ERROR OCCURRED: ", err);
-    res.send(err)
+    console.log("Error", err);
+    res.status(404)
   }
 })
 
@@ -170,9 +186,10 @@ router.delete("/todos/:id/:todoid", async (req, res) => {
   
     
   } catch (err){
-    console.log("ERROR OCCURRED: ", err);
-    res.send(err)
+    console.log("Error", err);
+    res.status(404)
   }
+
 })
 
 //NEWS
@@ -186,9 +203,11 @@ router.get("/news/top", async (req, res) => {
     console.log("topStoriesFromApi", topStoriesFromApi.data.articles[0])
   
     res.send(topStoriesFromApi.data)
-  } catch (err) {
-    res.send(err)
+  } catch (err){
+    console.log("Error", err);
+    res.status(404)
   }
+
 })
 
 
