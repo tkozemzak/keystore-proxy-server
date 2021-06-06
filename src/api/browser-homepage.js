@@ -126,7 +126,6 @@ router.post("/todos/:id", async (req, res) => {
 
   let newTodo = {
     "title": req.body.title,
-    "additionalInfo": req.body.additionalInfo,
     "user_id": req.params.id,
     "completed": 0,
     "created_at": req.body.created_at
