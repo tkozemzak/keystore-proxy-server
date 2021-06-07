@@ -9,16 +9,18 @@ const port = process.env.PORT || 8000;
 console.log("dotenv", process.env.PORT);
 
 
-const options = {
-  key: fs.readFileSync('key.pem'),
-  cert: fs.readFileSync('cert.pem')
-};
+// const options = {
+//   key: fs.readFileSync('key.pem'),
+//   cert: fs.readFileSync('cert.pem')
+// };
 
 
-https
-  .createServer(
-    options,
-    app
-  ).listen(port, () => {
+// https
+//   .createServer(
+//     options,
+//     app
+//   ).
+  
+  app.listen(port, () => {
   console.log(`Listening: http://localhost:${port}`);
 });
