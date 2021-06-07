@@ -17,7 +17,8 @@ router.get("/geomap/:lat/:long", async (req, res, next) => {
     const { data } = await axios.get(
       `${MAP_URL}${req.params.lat},${req.params.long}&sensor=true&key=${process.env.GOOGLE_GEOCODE_API_KEY}`
     );
-    let foundCity = data.results[0].address_components[3].short_name;
+    console.log('data from Google API', data)
+    let foundCity = data.results[0].address_components[1].short_name;
     console.log("Sending location data to client:", foundCity);
     return res.json(foundCity);
   } catch(err) {
