@@ -73,5 +73,5 @@ typings/
 # Serverless directories
 .serverless
 
-/src/server.cert
-/src/server.key
+/src/key.pem
+/src/cert.pem
