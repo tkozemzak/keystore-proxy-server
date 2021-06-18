@@ -1,6 +1,8 @@
 const express = require("express");
 const axios = require("axios");
-const knex = require("../../knex")
+const knex = require("../../knex");
+const e = require("express");
+const { CLIEngine } = require("eslint");
 
 const router = express.Router();
 
@@ -57,17 +59,24 @@ router.post("/todos/login", async (req, res) => {
   } else {
     try {
       let userFromDb = await knex('users').where('email', req.body.email)
+
+      if (!userFromDb[0]) {
+        console.log("User not found")
+        res.status(200).send({message: "User Not Found"})
+      } else {
+        if (userFromDb[0].password === req.body.password) {
+          console.log(`Password Matches for user:  ${userFromDb[0].email}`);
+          //remove password from object and send to client
+          delete userFromDb[0].password;
+          res.status(200).send(userFromDb[0])
+        } else {
+          console.log("Wrong Password");
+          res.status(200).send({message: "Wrong Password"})
+  
+        }
+      }
     
-       if (userFromDb[0].password === req.body.password) {
-         console.log(`Password Matches for user:  ${userFromDb[0].email}`);
-         //remove password from object and send to client
-         delete userFromDb[0].password;
-         res.status(200).send(userFromDb[0])
-       } else {
-         console.log("Wrong Password");
-         res.status(200).send({message: "Wrong Password"})
- 
-       }
+       
    } catch (err){
      console.log("Error", err);
      res.status(404)
@@ -85,20 +94,26 @@ router.post("/todos/signup", async (req, res) => {
     "lastName": req.body.lastName,
     "email": req.body.email,
     "password": req.body.password,
-    "created_at": req.body.created_at
+    "created_at": req.body.created_at,
   }
     try {
 //check for existing user in DB
-      let userFromDb = await knex('users').where('email', newUser.email)
+      
+      let userFromDb = await knex('users').where('email', newUser.email).returning('id')
+      // .then((id)=> {
+      //   newUser.id = id;
+      // })
       console.log('user from DB', userFromDb)
 
-      if(userFromDb.length) {
+      if(userFromDb && userFromDb.length) {
         res.status(200).send({message: "User already exists"})
       } else {
 //if user doesn't exist in db, create new user
         await knex('users').insert(newUser)
-  
-        res.status(200).send(newUser)
+//retrieve new user from db so that id exists in object
+        let insertedUser = await knex('users').where('email', newUser.email)
+        console.log("insertedUser", insertedUser)
+        res.status(200).send(insertedUser[0])
       }
    } catch (err){
     console.log("Error", err);
