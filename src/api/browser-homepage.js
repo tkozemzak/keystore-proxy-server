@@ -50,6 +50,27 @@ router.get("/geomap/:lat/:long", async (req, res, next) => {
 //--------
 //TODOS WIDGET
 
+//check login
+
+router.post("/todos/check-login/:id", async (req, res) => {
+  console.log("req.BODY", req.body)
+
+  try {
+    let userFromDb = await knex('users').where('id', req.params.id)
+
+    console.log('user from db', userFromDb);
+
+    if (userFromDb[0].email !== req.body.email) {
+      res.status(200).send(false)
+    } else {
+      res.status(200).send(true)
+    }
+  } catch (err) {
+    res.status(200).send({ message: "Error login status"})
+  }
+ 
+})
+
 //login
 router.post("/todos/login", async (req, res) => {
   console.log("req.BODY", req.body)
